@@ -31,16 +31,20 @@ public class main {
                     – Hard: Rows: 20 Columns: 20 Mines: 40 Flags: 40
                      */
         //Set Difficulty
+        int numMines = 0;
         Minefield minefield;
         if (difficulty == 0) {
             //Easy
             minefield = new Minefield(5, 5, 5);
+            numMines = 5;
         } else if (difficulty == 1) {
             //Medium
             minefield = new Minefield(9, 9, 12);
+            numMines = 12;
         } else {
             //Hard
             minefield = new Minefield(20, 20, 40);
+            numMines = 40;
         }
         String[] response = new String[0];
         System.out.println(minefield);
@@ -49,10 +53,12 @@ public class main {
             response = scanner.nextLine().split(" ");
             System.out.println(Arrays.toString(response));
         }while(response.length < 2);
-
-
-        minefield.revealZeroes(Integer.parseInt(response[0]), Integer.parseInt(response[0]));
-
+        int startX = Integer.parseInt(response[0]);
+        int startY = Integer.parseInt(response[1]);
+        minefield.createMines(startX, startY, numMines);
+        minefield.evaluateField();
+        minefield.revealZeroes(startX, startY);
+        minefield.debug();
 
         while ( ! minefield.gameOver()) {
             System.out.println(minefield);
