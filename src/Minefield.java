@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
@@ -168,11 +169,11 @@ public class Minefield {
 //     * 1. player guesses a cell with a mine: game over -> player loses
 //     * 2. player has revealed the last cell without revealing any mines -> player wins
 //     *
-//     * @return boolean Return false if game is not over and squares have yet to be revealed, otheriwse return true.
+//     * @return boolean Return false if game is not over and squares have yet to be revealed, otherwise return true.
 //     */
-//    public boolean gameOver() {
-//
-//    }
+    public boolean gameOver() {
+        return false;
+    }
 //
 //    /**
 //     * Reveal the cells that contain zeroes that surround the inputted cell.
@@ -189,23 +190,44 @@ public class Minefield {
 //
 //
 //    }
-//
-//    /**
-//     * revealStartingArea
-//     *
-//     * On the starting move only reveal the neighboring cells of the inital cell and continue revealing the surrounding concealed cells until a mine is found.
-//     * Utilize a QUEUE to accomplish this.
-//     *
-//     * This method should follow the psuedocode given in the lab writeup.
-//     * Why might a queue be useful for this function?
-//     *
-//     * @param x     The x value the user entered.
-//     * @param y     The y value the user entered.
-//     */
+
+    /**
+     * revealStartingArea
+     *
+     * On the starting move only reveal the neighboring cells of the initial cell and continue revealing the surrounding concealed cells until a mine is found.
+     * Utilize a QUEUE to accomplish this.
+     *
+     * This method should follow the pseudocode given in the lab writeup.
+     * Why might a queue be useful for this function?
+     *
+     * @param x     The x value the user entered.
+     * @param y     The y value the user entered.
+     */
 //    public void revealStartingArea(int x, int y) {
-//
+//        Queue<int[]> indices = new LinkedList<>();
+//        indices.add(new int[] {x, y});
+//        while (!indices.isEmpty()) {
+//            int[] curr = indices.remove();
+//            // get current coordinates to check surroundings
+//            x = curr[0];
+//            y = curr[1];
+//            board[x][y] = reveal; // reveal
+//            // check surroundings
+//            if (x < board.length - 1 && board[x + 1][y] == reveal) {
+//                indices.add(new int[] {x + 1, y});
+//            }
+//            if (x > 0 && board[x - 1][y] == reveal) {
+//                indices.add(new int[] {x - 1, y});
+//            }
+//            if (y < board[0].length - 1 && board[x][y + 1] == reveal) {
+//                indices.add(new int[] {x, y + 1});
+//            }
+//            if (y > 0 && board[x][y - 1] == reveal) {
+//                indices.add(new int[] {x, y - 1});
+//            }
+//        }
 //    }
-//
+
 //    /**
 //     * For both printing methods utilize the ANSI colour codes provided!
 //     *

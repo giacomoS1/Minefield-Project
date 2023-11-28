@@ -1,9 +1,7 @@
 //Import Section
-import java.util.Random;
-import java.util.Scanner;
 
 /*
- * Provided in this class is the neccessary code to get started with your game's implementation
+ * Provided in this class is the necessary code to get started with your game's implementation
  * You will find a while loop that should take your minefield's gameOver() method as its conditional
  * Then you will prompt the user with input and manipulate the data as before in project 2
  * 
@@ -14,10 +12,39 @@ import java.util.Scanner;
  * 4. Once while loop is complete figure out how to determine if the user won or lost. Print appropriate statement.
  */
 
-public class main(String[] args) {
+import java.util.Scanner;
 
+public class main {
 
-    while(/* ! minefield.gameOver() */ ){
+    public static void main(String[] args) {
+        boolean debug;
+        Minefield minefield = null;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter a difficulty (easy, medium, hard). To use debugging, add ' debug' to your input");
+        while (minefield == null) { // allowing infinite inputs until correct
+            String mode = scanner.next();
+            if (mode.equals("easy") || mode.equals("easy debug")) {
+                if (mode.equals("easy debug")) debug = true;
+                minefield = new Minefield(5, 5, 5);
+            }
+            else if (mode.equals("medium") || mode.equals("medium debug")) {
+                if (mode.equals("medium debug")) debug = true;
+                minefield = new Minefield(9, 9, 12);
+            }
+
+            else if ((mode.equals("hard")  || mode.equals("hard debug"))) {
+                if (mode.equals("hard debug")) debug = true;
+                minefield = new Minefield(20, 20, 40);
+            }
+            else {
+                System.out.println("Error in input, please try again."); // only reached if board is not initialized
+            }
+        }
+
+        while(!minefield.gameOver()){
+            // game
+        }
     }
+
     
 }
