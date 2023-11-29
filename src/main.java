@@ -16,12 +16,12 @@ import java.util.Scanner;
 
 public class main {
 
-    public static void main (String[] args) { //Giacomo
+    public static void main (String[] args) { //Giacomo & Luke
         //Prompt user for difficulty, make sure it's between 0 and 2 (inclusive)
         Scanner scanner = new Scanner(System.in);
         int difficulty = -1;
         while(difficulty < 0 || difficulty > 2) {
-            System.out.println("Choose your difficulty" + System.lineSeparator() +
+            System.out.println("Choose your difficulty\n" +
                     "[0]: Easy     [1]: Medium     [2]: Hard");
             difficulty = scanner.nextInt();
         }

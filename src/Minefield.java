@@ -201,8 +201,31 @@ public class Minefield {
      * @param x     The x value the user entered.
      * @param y     The y value the user entered.
      */
-    public void revealStartingArea(int x, int y) {
-
+    public void revealStartingArea(int x, int y) { //Luke
+        /*
+        Queue<int[]> indices = new LinkedList<>();
+        indices.add(new int[] {x, y});
+        while (!indices.isEmpty()) {
+            int[] curr = indices.remove();
+            // get current coordinates to check surroundings
+            x = curr[0];
+            y = curr[1];
+            board[x][y] = reveal; // reveal
+            // check surroundings
+            if (x < board.length - 1 && board[x + 1][y] == reveal) {
+                indices.add(new int[] {x + 1, y});
+            }
+            if (x > 0 && board[x - 1][y] == reveal) {
+                indices.add(new int[] {x - 1, y});
+            }
+            if (y < board[0].length - 1 && board[x][y + 1] == reveal) {
+                indices.add(new int[] {x, y + 1});
+            }
+            if (y > 0 && board[x][y - 1] == reveal) {
+                indices.add(new int[] {x, y - 1});
+            }
+        }
+         */
     }
 
     /**
@@ -218,12 +241,14 @@ public class Minefield {
      * *This method should print out when debug mode has been selected.
      */
     public void debug() { //Giacomo
+        System.out.println("-------------------\nDEBUGGER:");
         for (Cell [] row : board) {
             for (Cell cell : row) {
                 System.out.print(cell.getStatus() + " ");
             }
             System.out.println();
         }
+        System.out.println("-------------------");
     }
 
     /**
@@ -231,7 +256,7 @@ public class Minefield {
      *
      * @return String The string that is returned only has the squares that has been revealed to the user or that the user has guessed.
      */
-    public String toString() {
+    public String toString() { //Giacomo
         String s = "";
         for (Cell [] row : board) {
             for (Cell cell : row) {
