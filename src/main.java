@@ -1,7 +1,9 @@
 //Import Section
-
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
 /*
- * Provided in this class is the necessary code to get started with your game's implementation
+ * Provided in this class is the neccessary code to get started with your game's implementation
  * You will find a while loop that should take your minefield's gameOver() method as its conditional
  * Then you will prompt the user with input and manipulate the data as before in project 2
  * 
@@ -12,39 +14,59 @@
  * 4. Once while loop is complete figure out how to determine if the user won or lost. Print appropriate statement.
  */
 
-import java.util.Scanner;
-
 public class main {
 
-    public static void main(String[] args) {
-        boolean debug;
-        Minefield minefield = null;
+    public static void main (String[] args) { //Giacomo & Luke
+        //Prompt user for difficulty, make sure it's between 0 and 2 (inclusive)
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter a difficulty (easy, medium, hard). To use debugging, add ' debug' to your input");
-        while (minefield == null) { // allowing infinite inputs until correct
-            String mode = scanner.next();
-            if (mode.equals("easy") || mode.equals("easy debug")) {
-                if (mode.equals("easy debug")) debug = true;
-                minefield = new Minefield(5, 5, 5);
-            }
-            else if (mode.equals("medium") || mode.equals("medium debug")) {
-                if (mode.equals("medium debug")) debug = true;
-                minefield = new Minefield(9, 9, 12);
-            }
-
-            else if ((mode.equals("hard")  || mode.equals("hard debug"))) {
-                if (mode.equals("hard debug")) debug = true;
-                minefield = new Minefield(20, 20, 40);
-            }
-            else {
-                System.out.println("Error in input, please try again."); // only reached if board is not initialized
-            }
+        int difficulty = -1;
+        while(difficulty < 0 || difficulty > 2) {
+            System.out.println("Choose your difficulty\n" +
+                    "[0]: Easy     [1]: Medium     [2]: Hard");
+            difficulty = scanner.nextInt();
         }
+                    /*
+                    - Easy: Rows: 5 Columns: 5 Mines: 5 Flags: 5
+                    – Medium: Rows: 9 Columns: 9 Mines: 12 Flags: 12
+                    – Hard: Rows: 20 Columns: 20 Mines: 40 Flags: 40
+                     */
+        //Set Difficulty
+        int numMines = 0;
+        Minefield minefield;
+        if (difficulty == 0) {
+            //Easy
+            minefield = new Minefield(5, 5, 5);
+            numMines = 5;
+        } else if (difficulty == 1) {
+            //Medium
+            minefield = new Minefield(9, 9, 12);
+            numMines = 12;
+        } else {
+            //Hard
+            minefield = new Minefield(20, 20, 40);
+            numMines = 40;
+        }
+        String[] response = new String[0];
+        System.out.println(minefield);
+        do {
+            System.out.println("Enter Starting Coordinates [x] [y]:");
+            response = scanner.nextLine().split(" ");
+            System.out.println(Arrays.toString(response));
+        } while(response.length < 2);
+        int startX = Integer.parseInt(response[0]);
+        int startY = Integer.parseInt(response[1]);
+        minefield.createMines(startX, startY, numMines);
+        minefield.evaluateField();
+        minefield.revealStartingArea(startX, startY);
+        minefield.debug();
 
-        while(!minefield.gameOver()){
-            // game
+        while ( ! minefield.gameOver()) {
+            System.out.println(minefield);
+            System.out.println("Enter Coordinates [x] [y] (add ' [F]' to your response for flag):");
+            response = scanner.nextLine().split(" ");
+            int x = Integer.parseInt(response[0]);
+            int y = Integer.parseInt(response[1]);
+            minefield.guess(x, y, (response.length > 2));
         }
     }
-
-    
 }
