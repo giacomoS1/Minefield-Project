@@ -214,7 +214,7 @@ public class Minefield {
      * @param y The y value the user entered.
      */
     public void revealZeroes(int x, int y) {
-
+        Stack1Gen<int[]> indices = new Stack1Gen<>();
     }
 
     /**
