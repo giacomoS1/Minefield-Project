@@ -49,20 +49,24 @@ public class main {
         String[] response = new String[0];
         System.out.println(minefield);
         do {
-            System.out.println("Enter Starting Coordinates [x] [y]");
+            System.out.println("Enter Starting Coordinates [x] [y]:");
             response = scanner.nextLine().split(" ");
             System.out.println(Arrays.toString(response));
-        }while(response.length < 2);
+        } while(response.length < 2);
         int startX = Integer.parseInt(response[0]);
         int startY = Integer.parseInt(response[1]);
         minefield.createMines(startX, startY, numMines);
         minefield.evaluateField();
-        minefield.revealZeroes(startX, startY);
+        minefield.revealStartingArea(startX, startY);
         minefield.debug();
 
         while ( ! minefield.gameOver()) {
             System.out.println(minefield);
-            break;
+            System.out.println("Enter Coordinates [x] [y] (add ' [F]' to your response for flag):");
+            response = scanner.nextLine().split(" ");
+            int x = Integer.parseInt(response[0]);
+            int y = Integer.parseInt(response[1]);
+            minefield.guess(x, y, (response.length > 2));
         }
     }
 }

@@ -5,8 +5,8 @@ import java.util.Random;
 
 public class Minefield {
     /**
-    Global Section
-    */
+     * Global Section
+     */
     public static final String ANSI_YELLOW_BRIGHT = "\u001B[33;1m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_BLUE_BRIGHT = "\u001b[34;1m";
@@ -20,47 +20,53 @@ public class Minefield {
     public static final String ANSI_PURPLE_BACKGROUND = "\u001b[45m";
     public static final String ANSI_GREY_BACKGROUND = "\u001b[0m";
 
-    /* 
+    /*
      * Class Variable Section
      * 
-    */
+     */
 
-    /*Things to Note:
+    /*
+     * Things to Note:
      * Please review ALL files given before attempting to write these functions.
-     * Understand the Cell.java class to know what object our array contains and what methods you can utilize
-     * Understand the StackGen.java class to know what type of stack you will be working with and methods you can utilize
-     * Understand the QGen.java class to know what type of queue you will be working with and methods you can utilize
+     * Understand the Cell.java class to know what object our array contains and
+     * what methods you can utilize
+     * Understand the StackGen.java class to know what type of stack you will be
+     * working with and methods you can utilize
+     * Understand the QGen.java class to know what type of queue you will be working
+     * with and methods you can utilize
      */
 
     private Cell[][] board;
     private int rows, columns;
     private int flags;
+
     /**
      * Minefield
      * 
      * Build a 2-d Cell array representing your minefield.
      * Constructor
-     * @param rows       Number of rows.
-     * @param columns    Number of columns.
-     * @param flags     x Number of flags, should be equal to mines
+     * 
+     * @param rows    Number of rows.
+     * @param columns Number of columns.
+     * @param flags   x Number of flags, should be equal to mines
      */
 
     public static void main(String[] args) {
         Minefield test = new Minefield(10, 10, 10);
     }
-    public Minefield(int rows, int columns, int flags) { //Giacomo
+
+    public Minefield(int rows, int columns, int flags) { // Giacomo
         this.rows = rows;
         this.columns = columns;
         this.flags = flags;
 
-        //Initialize Board
+        // Initialize Board
         board = new Cell[rows][columns];
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
-                board[row][col] = new Cell (false, "-");
+                board[row][col] = new Cell(false, "-");
             }
         }
-
 
     }
 
@@ -69,16 +75,19 @@ public class Minefield {
      *
      *
      * @function:
-     * Evaluate entire array.
-     * When a mine is found check the surrounding adjacent tiles. If another mine is found during this check, increment adjacent cells status by 1.
+     *            Evaluate entire array.
+     *            When a mine is found check the surrounding adjacent tiles. If
+     *            another mine is found during this check, increment adjacent cells
+     *            status by 1.
      *
      */
-    public void evaluateField() { //Giacomo
+    public void evaluateField() { // Giacomo
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
                 // If the pos is a mine, skip
-                if(board[row][col].getStatus().equals("M")) continue;
+                if (board[row][col].getStatus().equals("M"))
+                    continue;
                 int mines = 0;
                 // Calculate # of mines
                 if (row + 1 < rows) {
@@ -120,21 +129,22 @@ public class Minefield {
      * createMines
      *
      * Randomly generate coordinates for possible mine locations.
-     * If the coordinate has not already been generated and is not equal to the starting cell set the cell to be a mine.
+     * If the coordinate has not already been generated and is not equal to the
+     * starting cell set the cell to be a mine.
      * utilize rand.nextInt()
      *
-     * @param x       Start x, avoid placing on this square.
-     * @param y        Start y, avoid placing on this square.
-     * @param mines      Number of mines to place.
+     * @param x     Start x, avoid placing on this square.
+     * @param y     Start y, avoid placing on this square.
+     * @param mines Number of mines to place.
      */
-    public void createMines(int x, int y, int mines) { //Giacomo
+    public void createMines(int x, int y, int mines) { // Giacomo
         Random rand = new Random();
-        for(int i = 0; i < flags; i++) {
+        for (int i = 0; i < flags; i++) {
             // Generate a position
             int newMineRow = rand.nextInt(rows);
             int newMineCol = rand.nextInt(columns);
             // If the random pos is already taken by a mine, generate a new pos
-            while(board[newMineRow][newMineCol].getStatus().equals("M") || (newMineRow == x && newMineCol == y)) {
+            while (board[newMineRow][newMineCol].getStatus().equals("M") || (newMineRow == x && newMineCol == y)) {
                 newMineRow = rand.nextInt(rows);
                 newMineCol = rand.nextInt(columns);
             }
@@ -146,17 +156,33 @@ public class Minefield {
      * guess
      *
      * Check if the guessed cell is inbounds (if not done in the Main class).
-     * Either place a flag on the designated cell if the flag boolean is true or clear it.
-     * If the cell has a 0 call the revealZeroes() method or if the cell has a mine end the game.
+     * Either place a flag on the designated cell if the flag boolean is true or
+     * clear it.
+     * If the cell has a 0 call the revealZeroes() method or if the cell has a mine
+     * end the game.
      * At the end reveal the cell to the user.
      *
      *
-     * @param x       The x value the user entered.
-     * @param y       The y value the user entered.
-     * @param flag    A boolean value that allows the user to place a flag on the corresponding square.
-     * @return boolean Return false if guess did not hit mine or if flag was placed, true if mine found.
+     * @param x    The x value the user entered.
+     * @param y    The y value the user entered.
+     * @param flag A boolean value that allows the user to place a flag on the
+     *             corresponding square.
+     * @return boolean Return false if guess did not hit mine or if flag was placed,
+     *         true if mine found.
      */
     public boolean guess(int x, int y, boolean flag) {
+        if (x >= board.length || x < 0 || y >= board[x].length || y < 0) return false;
+        if (flag && flags > 0)  {
+            board[x][y].setStatus("F");
+            flags--;
+            return true;
+        }
+        else if (!flag) {
+            board[x][y].setRevealed(true);
+            if (board[x][y].getStatus().equals("M")) gameOver();
+            else if (board[x][y].getStatus().equals("0")) revealZeroes(x, y);
+            return true;
+        }
         return false;
     }
 
@@ -165,9 +191,11 @@ public class Minefield {
      *
      * Ways a game of Minesweeper ends:
      * 1. player guesses a cell with a mine: game over -> player loses
-     * 2. player has revealed the last cell without revealing any mines -> player wins
+     * 2. player has revealed the last cell without revealing any mines -> player
+     * wins
      *
-     * @return boolean Return false if game is not over and squares have yet to be revealed, otheriwse return true.
+     * @return boolean Return false if game is not over and squares have yet to be
+     *         revealed, otheriwse return true.
      */
     public boolean gameOver() {
         return false;
@@ -175,57 +203,57 @@ public class Minefield {
 
     /**
      * Reveal the cells that contain zeroes that surround the inputted cell.
-     * Continue revealing 0-cells in every direction until no more 0-cells are found in any direction.
+     * Continue revealing 0-cells in every direction until no more 0-cells are found
+     * in any direction.
      * Utilize a STACK to accomplish this.
      *
      * This method should follow the psuedocode given in the lab writeup.
      * Why might a stack be useful here rather than a queue?
      *
-     * @param x      The x value the user entered.
-     * @param y      The y value the user entered.
+     * @param x The x value the user entered.
+     * @param y The y value the user entered.
      */
     public void revealZeroes(int x, int y) {
-
 
     }
 
     /**
      * revealStartingArea
      *
-     * On the starting move only reveal the neighboring cells of the inital cell and continue revealing the surrounding concealed cells until a mine is found.
+     * On the starting move only reveal the neighboring cells of the inital cell and
+     * continue revealing the surrounding concealed cells until a mine is found.
      * Utilize a QUEUE to accomplish this.
      *
      * This method should follow the psuedocode given in the lab writeup.
      * Why might a queue be useful for this function?
      *
-     * @param x     The x value the user entered.
-     * @param y     The y value the user entered.
+     * @param x The x value the user entered.
+     * @param y The y value the user entered.
      */
-    public void revealStartingArea(int x, int y) { //Luke
-        /*
-        Queue<int[]> indices = new LinkedList<>();
-        indices.add(new int[] {x, y});
-        while (!indices.isEmpty()) {
+    public void revealStartingArea(int x, int y) { // Luke
+        Q1Gen<int[]> indices = new Q1Gen<>();
+        indices.add(new int[] { x, y });
+        while (indices.length() != 0) {
             int[] curr = indices.remove();
             // get current coordinates to check surroundings
             x = curr[0];
             y = curr[1];
-            board[x][y] = reveal; // reveal
+            board[x][y].setRevealed(true); // reveal
+            if (board[x][y].getStatus().equals("M")) break; // break if mine is found
             // check surroundings
-            if (x < board.length - 1 && board[x + 1][y] == reveal) {
-                indices.add(new int[] {x + 1, y});
+            if (x < board.length - 1 && !board[x + 1][y].getRevealed()) {
+                indices.add(new int[] { x + 1, y });
             }
-            if (x > 0 && board[x - 1][y] == reveal) {
-                indices.add(new int[] {x - 1, y});
+            if (x > 0 && !board[x - 1][y].getRevealed()) {
+                indices.add(new int[] { x - 1, y });
             }
-            if (y < board[0].length - 1 && board[x][y + 1] == reveal) {
-                indices.add(new int[] {x, y + 1});
+            if (y < board[0].length - 1 && !board[x][y + 1] .getRevealed()) {
+                indices.add(new int[] { x, y + 1 });
             }
-            if (y > 0 && board[x][y - 1] == reveal) {
-                indices.add(new int[] {x, y - 1});
+            if (y > 0 && !board[x][y - 1].getRevealed()) {
+                indices.add(new int[] { x, y - 1 });
             }
         }
-         */
     }
 
     /**
@@ -237,12 +265,13 @@ public class Minefield {
      *
      * debug
      *
-     * @function This method should print the entire minefield, regardless if the user has guessed a square.
-     * *This method should print out when debug mode has been selected.
+     * @function This method should print the entire minefield, regardless if the
+     *           user has guessed a square.
+     *           *This method should print out when debug mode has been selected.
      */
-    public void debug() { //Giacomo
+    public void debug() { // Giacomo
         System.out.println("-------------------\nDEBUGGER:");
-        for (Cell [] row : board) {
+        for (Cell[] row : board) {
             for (Cell cell : row) {
                 System.out.print(cell.getStatus() + " ");
             }
@@ -254,14 +283,20 @@ public class Minefield {
     /**
      * toString
      *
-     * @return String The string that is returned only has the squares that has been revealed to the user or that the user has guessed.
+     * @return String The string that is returned only has the squares that has been
+     *         revealed to the user or that the user has guessed.
      */
-    public String toString() { //Giacomo
-        String s = "";
-        for (Cell [] row : board) {
-            for (Cell cell : row) {
-                if(cell.getRevealed()) {
-                    switch (cell.getStatus()) {
+    public String toString() { // Giacomo
+        String s = "* ";
+        for (int col = 0; col < columns; col++) { // printing to help with coordinates
+            s += col + " ";
+        }
+        s += "\n";
+        for (int row = 0; row < rows; row++) {
+            s += row + " "; // help with coordinates
+            for (int col = 0; col < columns; col++) {
+                if (board[row][col].getRevealed()) {
+                    switch (board[row][col].getStatus()) {
                         case "F":
                             s += ANSI_YELLOW + "F " + ANSI_GREY_BACKGROUND;
                             break;
@@ -281,9 +316,9 @@ public class Minefield {
                             s += ANSI_GREEN + "2 " + ANSI_GREY_BACKGROUND;
                             break;
                         default:
-                            s += ANSI_RED + cell.getStatus() + " " + ANSI_GREY_BACKGROUND;
+                            s += ANSI_RED + board[row][col].getStatus() + " " + ANSI_GREY_BACKGROUND;
                     }
-                    //s += cell.getStatus() + " ";
+                    // s += cell.getStatus() + " ";
                 } else {
                     s += "- ";
                 }
