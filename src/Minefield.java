@@ -70,6 +70,11 @@ public class Minefield {
 
     }
 
+    // used to tell how many flags left in-game
+    public int getFlags() {
+        return flags;
+    }
+
     /**
      * evaluateField
      *

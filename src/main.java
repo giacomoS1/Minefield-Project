@@ -62,7 +62,7 @@ public class main {
 
         while ( ! minefield.gameOver()) {
             System.out.println(minefield);
-            System.out.println("Enter Coordinates [x] [y] (add ' [F]' to your response for flag):");
+            System.out.println("Enter Coordinates [x] [y] (add ' [F]' to your response for flag, remaining: " + minefield.getFlags() + "):");
             response = scanner.nextLine().split(" ");
             int x = Integer.parseInt(response[0]);
             int y = Integer.parseInt(response[1]);
