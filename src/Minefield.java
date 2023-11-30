@@ -177,8 +177,13 @@ public class Minefield {
      */
     public boolean guess(int x, int y, boolean flag) { //Luke
         if (x >= board.length || x < 0 || y >= board[x].length || y < 0) return false;
-        if (flag && flags > 0)  {
-              board[x][y].setStatus("F");
+        if (board[x][y].getStatus().equals("F")) { // check if cell is flagged, if so, unflag, since you can't guess a flagged cell
+            board[x][y].setStatus(""); // TODO: Set to coordinate tracked before flagged
+            flags++;
+            return true;
+        }
+        else if (flag && flags > 0 && !board[x][y].getRevealed())  {
+            board[x][y].setStatus("F");
             flags--;
             return true;
         }
