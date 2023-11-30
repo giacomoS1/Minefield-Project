@@ -175,10 +175,10 @@ public class Minefield {
      * @return boolean Return false if guess did not hit mine or if flag was placed,
      *         true if mine found.
      */
-    public boolean guess(int x, int y, boolean flag) {
+    public boolean guess(int x, int y, boolean flag) { //Luke
         if (x >= board.length || x < 0 || y >= board[x].length || y < 0) return false;
         if (flag && flags > 0)  {
-            board[x][y].setStatus("F");
+              board[x][y].setStatus("F");
             flags--;
             return true;
         }
@@ -291,7 +291,7 @@ public class Minefield {
      * @return String The string that is returned only has the squares that has been
      *         revealed to the user or that the user has guessed.
      */
-    public String toString() { // Giacomo
+    public String toString() { // Giacomo & Luke
         String s = "* ";
         for (int col = 0; col < columns; col++) { // printing to help with coordinates
             s += col + " ";

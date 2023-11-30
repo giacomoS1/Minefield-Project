@@ -66,7 +66,10 @@ public class main {
             response = scanner.nextLine().split(" ");
             int x = Integer.parseInt(response[0]);
             int y = Integer.parseInt(response[1]);
-            minefield.guess(x, y, (response.length > 2));
+            //if the guess() function returns false, there was an error in the input.
+            if(!minefield.guess(x, y, (response.length > 2))) {
+                System.out.println("Try again, input invalid.");
+            }
         }
     }
 }
