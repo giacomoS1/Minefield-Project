@@ -1,6 +1,5 @@
 //Import Section
 import java.util.Arrays;
-import java.util.Random;
 import java.util.Scanner;
 /*
  * Provided in this class is the neccessary code to get started with your game's implementation
@@ -19,12 +18,9 @@ public class main {
     public static void main (String[] args) { //Giacomo & Luke
         //Prompt user for difficulty, make sure it's between 0 and 2 (inclusive)
         Scanner scanner = new Scanner(System.in);
-        int difficulty = -1;
-        while(difficulty < 0 || difficulty > 2) {
-            System.out.println("Choose your difficulty\n" +
-                    "[0]: Easy     [1]: Medium     [2]: Hard");
-            difficulty = scanner.nextInt();
-        }
+        // Tracker for debug mode
+        boolean debug = false;
+        System.out.println("Choose your difficulty,\n[0]: Easy     [1]: Medium     [2]: Hard\nAdd ' debug' to your response to play in debug mode.");
                     /*
                     - Easy: Rows: 5 Columns: 5 Mines: 5 Flags: 5
                     – Medium: Rows: 9 Columns: 9 Mines: 12 Flags: 12
@@ -32,33 +28,36 @@ public class main {
                      */
         //Set Difficulty
         int numMines = 0;
-        Minefield minefield;
-        if (difficulty == 0) {
-            //Easy
-            minefield = new Minefield(5, 5, 5);
-            numMines = 5;
-        } else if (difficulty == 1) {
-            //Medium
-            minefield = new Minefield(9, 9, 12);
-            numMines = 12;
-        } else {
-            //Hard
-            minefield = new Minefield(20, 20, 40);
-            numMines = 40;
+        Minefield minefield = null;
+        while (minefield == null) { // allowing infinite inputs until correct
+            String difficulty = scanner.nextLine();
+            if (difficulty.equals("0") || difficulty.equals("0 debug")) {
+                if (difficulty.equals("0 debug")) debug = true;
+                minefield = new Minefield(5, 5, 5);
+                numMines = 5;
+            } else if (difficulty.equals("1") || difficulty.equals("1 debug")) {
+                if (difficulty.equals("1 debug")) debug = true;
+                minefield = new Minefield(9, 9, 12);
+                numMines = 12;
+            } else if ((difficulty.equals("2") || difficulty.equals("2 debug"))) {
+                if (difficulty.equals("2 debug")) debug = true;
+                minefield = new Minefield(20, 20, 40);
+                numMines = 40;
+            } else {
+                System.out.println("Error in input, please try again."); // only reached if board is not initialized
+            }
         }
-        String[] response = new String[0];
+        String[] response;
         System.out.println(minefield);
-        do {
-            System.out.println("Enter Starting Coordinates [x] [y]:");
-            response = scanner.nextLine().split(" ");
-            System.out.println(Arrays.toString(response));
-        } while(response.length < 2);
+        System.out.println("Enter Starting Coordinates [x] [y]:");
+        response = scanner.nextLine().split(" ");
+        System.out.println(Arrays.toString(response));
         int startX = Integer.parseInt(response[0]);
         int startY = Integer.parseInt(response[1]);
         minefield.createMines(startX, startY, numMines);
         minefield.evaluateField();
+        if (debug) minefield.debug();
         minefield.revealStartingArea(startX, startY);
-        minefield.debug();
 
         while ( ! minefield.gameOver()) {
             System.out.println(minefield);
@@ -66,6 +65,7 @@ public class main {
             response = scanner.nextLine().split(" ");
             int x = Integer.parseInt(response[0]);
             int y = Integer.parseInt(response[1]);
+            if (debug) minefield.debug(); // for debug mode
             //if the guess() function returns false, there was an error in the input.
             if(!minefield.guess(x, y, (response.length > 2))) {
                 System.out.println("Try again, input invalid.");

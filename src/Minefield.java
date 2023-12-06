@@ -1,4 +1,3 @@
-import java.util.Queue;
 import java.util.Random;
 
 //
@@ -144,7 +143,7 @@ public class Minefield {
      */
     public void createMines(int x, int y, int mines) { // Giacomo
         Random rand = new Random();
-        for (int i = 0; i < flags; i++) {
+        for (int i = 0; i < mines; i++) {
             // Generate a position
             int newMineRow = rand.nextInt(rows);
             int newMineCol = rand.nextInt(columns);
@@ -279,14 +278,48 @@ public class Minefield {
      *           user has guessed a square.
      *           *This method should print out when debug mode has been selected.
      */
-    public void debug() { // Giacomo
+    public void debug() { // Giacomo & Luke
+        // using toString() with no hidden tiles
         System.out.println("-------------------\nDEBUGGER:");
-        for (Cell[] row : board) {
-            for (Cell cell : row) {
-                System.out.print(cell.getStatus() + " ");
-            }
-            System.out.println();
+        for (int col = 0; col < columns; col++) { // printing to help with coordinates
+            System.out.print(col + " ");
         }
+        System.out.println();;
+        for (int row = 0; row < rows; row++) {
+            System.out.print(row + " "); // help with coordinates
+            for (int col = 0; col < columns; col++) {
+                    switch (board[row][col].getStatus()) {
+                        case "M":
+                            System.out.print(ANSI_RED_BRIGHT + "M " + ANSI_GREY_BACKGROUND);
+                            break;
+                        case "-":
+                            System.out.print(ANSI_GREY_BACKGROUND + "- ");
+                            break;
+                        case "0":
+                            System.out.print(ANSI_YELLOW + "0 " + ANSI_GREY_BACKGROUND);
+                            break;
+                        case "1":
+                            System.out.print(ANSI_BLUE + "1 " + ANSI_GREY_BACKGROUND);
+                            break;
+                        case "2":
+                            System.out.print(ANSI_GREEN + "2 " + ANSI_GREY_BACKGROUND);
+                            break;
+                        case "3":
+                            System.out.print(ANSI_CYAN + "3 " + ANSI_GREY_BACKGROUND);
+                            break;
+                        case "4":
+                            System.out.print(ANSI_RED + "4 " + ANSI_GREY_BACKGROUND);
+                            break;
+                        case "5":
+                            System.out.print(ANSI_PURPLE + "5 " + ANSI_GREY_BACKGROUND);
+                            break;
+                        default:
+                            System.out.print(ANSI_RED + board[row][col].getStatus() + " " + ANSI_GREY_BACKGROUND);
+                    }
+                    // s += cell.getStatus() + " ";
+                }
+            System.out.println();;
+            }
         System.out.println("-------------------");
     }
 
@@ -297,7 +330,7 @@ public class Minefield {
      *         revealed to the user or that the user has guessed.
      */
     public String toString() { // Giacomo & Luke
-        String s = "* ";
+        String s = "  ";
         for (int col = 0; col < columns; col++) { // printing to help with coordinates
             s += col + " ";
         }
@@ -305,7 +338,7 @@ public class Minefield {
         for (int row = 0; row < rows; row++) {
             s += row + " "; // help with coordinates
             for (int col = 0; col < columns; col++) {
-                if (board[row][col].getRevealed() || board[row][col].getFlagged()) { // either will dislay if flagged or revealed
+                if (board[row][col].getRevealed() || board[row][col].getFlagged()) { // either will display if flagged or revealed
                     if (board[row][col].getFlagged()) s+= ANSI_YELLOW + "F " + ANSI_GREY_BACKGROUND; // if flagged, display flag
                     else {
                         switch (board[row][col].getStatus()) {
@@ -326,6 +359,15 @@ public class Minefield {
                                 break;
                             case "2":
                                 s += ANSI_GREEN + "2 " + ANSI_GREY_BACKGROUND;
+                                break;
+                            case "3":
+                                s += ANSI_CYAN + "3" + ANSI_GREY_BACKGROUND;
+                                break;
+                            case "4":
+                                s += ANSI_RED + "4" + ANSI_GREY_BACKGROUND;
+                                break;
+                            case "5":
+                                s += ANSI_PURPLE + "5" + ANSI_GREY_BACKGROUND;
                                 break;
                             default:
                                 s += ANSI_RED + board[row][col].getStatus() + " " + ANSI_GREY_BACKGROUND;
