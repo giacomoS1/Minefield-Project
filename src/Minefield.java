@@ -224,6 +224,29 @@ public class Minefield {
      */
     public void revealZeroes(int x, int y) {
         Stack1Gen<int[]> indices = new Stack1Gen<>();
+        indices.push(new int[] {x, y});
+        while(!indices.isEmpty()) {
+            int[] cord = indices.pop();
+            x = cord[0];
+            x = cord[1];
+
+            board[x][y].setRevealed(true);
+            if(board[x][y].getStatus().equals("M")) break;
+
+            if (x < board.length - 1 && !board[x + 1][y].getRevealed()) {
+                indices.push(new int[]{x + 1, y});
+            }
+            if (x > 0 && !board[x - 1][y].getRevealed()) {
+                indices.push(new int[]{x - 1, y});
+            }
+            if (y < board[0].length - 1 && !board[x][y + 1].getRevealed()) {
+                indices.push(new int[]{x, y + 1});
+            }
+            if (y > 0 && !board[x][y - 1].getRevealed()) {
+                indices.push(new int[]{x, y - 1});
+            }
+
+        }
     }
 
     /**
