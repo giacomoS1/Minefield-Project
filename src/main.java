@@ -57,14 +57,14 @@ public class main {
         minefield.createMines(startX, startY, numMines);
         minefield.evaluateField();
         if (debug) minefield.debug();
-        minefield.revealStartingArea(startX, startY);
+        minefield.revealStartingArea(startY, startX);
 
         while ( ! minefield.gameOver()) {
             System.out.println(minefield);
             System.out.println("Enter Coordinates [row] [col] (add ' [F]' to your response for flag, remaining: " + minefield.getFlags() + "):");
             response = scanner.nextLine().split(" ");
-            int row = Integer.parseInt(response[0]);
-            int col = Integer.parseInt(response[1]);
+            int row = Integer.parseInt(response[1]);
+            int col = Integer.parseInt(response[0]);
             if (debug) minefield.debug(); // for debug mode
             //if the guess() function returns false, there was an error in the input.
             if(!minefield.guess(row, col, (response.length > 2))) {
