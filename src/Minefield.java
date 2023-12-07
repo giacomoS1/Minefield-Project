@@ -38,6 +38,7 @@ public class Minefield {
     private Cell[][] board;
     private int rows, columns;
     private int flags;
+    private boolean gameOver = false;
 
     /**
      * Minefield
@@ -179,6 +180,7 @@ public class Minefield {
         if (board[x][y].getFlagged()) { // check if cell is flagged, if so, unflag, since you can't guess a flagged cell
             board[x][y].setFlagged(false);
             flags++;
+            System.out.println("Removed flag at (" + x + ", " + y + ")");
             return true;
         }
         else if (flag && flags > 0 && !board[x][y].getRevealed())  {
@@ -188,7 +190,7 @@ public class Minefield {
         }
         else if (!flag) {
             board[x][y].setRevealed(true);
-            if (board[x][y].getStatus().equals("M")) gameOver();
+            if (board[x][y].getStatus().equals("M")) gameOver = true;
             else if (board[x][y].getStatus().equals("0")) revealZeroes(x, y);
             return true;
         }
@@ -207,7 +209,10 @@ public class Minefield {
      *         revealed, otheriwse return true.
      */
     public boolean gameOver() {
-        return false;
+        if(gameOver) {
+            System.out.println("YOU LOST!");
+        }
+        return gameOver;
     }
 
     /**
@@ -228,10 +233,11 @@ public class Minefield {
         while(!indices.isEmpty()) {
             int[] cord = indices.pop();
             x = cord[0];
-            x = cord[1];
+            y = cord[1];
 
+            if(board[x][y].getStatus().equals("M")) continue;
             board[x][y].setRevealed(true);
-            if(board[x][y].getStatus().equals("M")) break;
+            if(!board[x][y].getStatus().equals("0")) continue;
 
             if (x < board.length - 1 && !board[x + 1][y].getRevealed()) {
                 indices.push(new int[]{x + 1, y});
@@ -353,35 +359,37 @@ public class Minefield {
      *         revealed to the user or that the user has guessed.
      */
     public String toString() { // Giacomo & Luke
-        String s = "  ";
+        String s = "   ";
         for (int col = 0; col < columns; col++) { // printing to help with coordinates
             s += col + " ";
+            if(col % 10 == col) s += " "; //to give single digit cols more padding, so they're aligned with double digit cols
         }
         s += "\n";
         for (int row = 0; row < rows; row++) {
             s += row + " "; // help with coordinates
+            if(row % 10 == row) s += " "; //to give single digit rows more padding, so they're aligned with double digit rows
             for (int col = 0; col < columns; col++) {
                 if (board[row][col].getRevealed() || board[row][col].getFlagged()) { // either will display if flagged or revealed
-                    if (board[row][col].getFlagged()) s+= ANSI_YELLOW + "F " + ANSI_GREY_BACKGROUND; // if flagged, display flag
+                    if (board[row][col].getFlagged()) s+= ANSI_YELLOW + "F  " + ANSI_GREY_BACKGROUND; // if flagged, display flag
                     else {
                         switch (board[row][col].getStatus()) {
 //                            case "F":
 //                                s += ANSI_YELLOW + "F " + ANSI_GREY_BACKGROUND;
 //                                break;
                             case "M":
-                                s += ANSI_RED_BRIGHT + "M " + ANSI_GREY_BACKGROUND;
+                                s += ANSI_RED_BRIGHT + "M" + ANSI_GREY_BACKGROUND;
                                 break;
                             case "-":
-                                s += ANSI_GREY_BACKGROUND + "- ";
+                                s += ANSI_GREY_BACKGROUND + "-";
                                 break;
                             case "0":
-                                s += ANSI_YELLOW + "0 " + ANSI_GREY_BACKGROUND;
+                                s += ANSI_YELLOW + "0" + ANSI_GREY_BACKGROUND;
                                 break;
                             case "1":
-                                s += ANSI_BLUE + "1 " + ANSI_GREY_BACKGROUND;
+                                s += ANSI_BLUE + "1" + ANSI_GREY_BACKGROUND;
                                 break;
                             case "2":
-                                s += ANSI_GREEN + "2 " + ANSI_GREY_BACKGROUND;
+                                s += ANSI_GREEN + "2" + ANSI_GREY_BACKGROUND;
                                 break;
                             case "3":
                                 s += ANSI_CYAN + "3" + ANSI_GREY_BACKGROUND;
@@ -393,12 +401,13 @@ public class Minefield {
                                 s += ANSI_PURPLE + "5" + ANSI_GREY_BACKGROUND;
                                 break;
                             default:
-                                s += ANSI_RED + board[row][col].getStatus() + " " + ANSI_GREY_BACKGROUND;
+                                s += ANSI_RED + board[row][col].getStatus() + "" + ANSI_GREY_BACKGROUND;
                         }
+                        s+= "  "; //padding
                     }
                     // s += cell.getStatus() + " ";
                 } else {
-                    s += "- ";
+                    s += "-  ";
                 }
             }
             s += "\n";

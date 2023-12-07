@@ -63,11 +63,11 @@ public class main {
             System.out.println(minefield);
             System.out.println("Enter Coordinates [x] [y] (add ' [F]' to your response for flag, remaining: " + minefield.getFlags() + "):");
             response = scanner.nextLine().split(" ");
-            int x = Integer.parseInt(response[0]);
-            int y = Integer.parseInt(response[1]);
+            int row = Integer.parseInt(response[1]);
+            int col = Integer.parseInt(response[0]);
             if (debug) minefield.debug(); // for debug mode
             //if the guess() function returns false, there was an error in the input.
-            if(!minefield.guess(x, y, (response.length > 2))) {
+            if(!minefield.guess(row, col, (response.length > 2))) {
                 System.out.println("Try again, input invalid.");
             }
         }
