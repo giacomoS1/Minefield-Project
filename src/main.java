@@ -49,7 +49,7 @@ public class main {
         }
         String[] response;
         System.out.println(minefield);
-        System.out.println("Enter Starting Coordinates [x] [y]:");
+        System.out.println("Enter Starting Coordinates [row] [col]:");
         response = scanner.nextLine().split(" ");
         System.out.println(Arrays.toString(response));
         int startX = Integer.parseInt(response[0]);
@@ -61,15 +61,16 @@ public class main {
 
         while ( ! minefield.gameOver()) {
             System.out.println(minefield);
-            System.out.println("Enter Coordinates [x] [y] (add ' [F]' to your response for flag, remaining: " + minefield.getFlags() + "):");
+            System.out.println("Enter Coordinates [row] [col] (add ' [F]' to your response for flag, remaining: " + minefield.getFlags() + "):");
             response = scanner.nextLine().split(" ");
-            int row = Integer.parseInt(response[1]);
-            int col = Integer.parseInt(response[0]);
+            int row = Integer.parseInt(response[0]);
+            int col = Integer.parseInt(response[1]);
             if (debug) minefield.debug(); // for debug mode
             //if the guess() function returns false, there was an error in the input.
             if(!minefield.guess(row, col, (response.length > 2))) {
                 System.out.println("Try again, input invalid.");
             }
         }
+        System.out.println(minefield); // for game over
     }
 }

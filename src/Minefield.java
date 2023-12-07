@@ -39,6 +39,7 @@ public class Minefield {
     private int rows, columns;
     private int flags;
     private boolean gameOver = false;
+    private Stack1Gen<int[]> mines = new Stack1Gen<>();
 
     /**
      * Minefield
@@ -50,10 +51,6 @@ public class Minefield {
      * @param columns Number of columns.
      * @param flags   x Number of flags, should be equal to mines
      */
-
-    public static void main(String[] args) {
-        Minefield test = new Minefield(10, 10, 10);
-    }
 
     public Minefield(int rows, int columns, int flags) { // Giacomo
         this.rows = rows;
@@ -142,16 +139,18 @@ public class Minefield {
      * @param y     Start y, avoid placing on this square.
      * @param mines Number of mines to place.
      */
-    public void createMines(int x, int y, int mines) { // Giacomo
+    public void createMines(int x, int y, int numMines) { // Giacomo
         Random rand = new Random();
-        for (int i = 0; i < mines; i++) {
+        for (int i = 0; i < numMines; i++) {
             // Generate a position
             int newMineRow = rand.nextInt(rows);
             int newMineCol = rand.nextInt(columns);
+            mines.push(new int[]{newMineRow, newMineCol});
             // If the random pos is already taken by a mine, generate a new pos
             while (board[newMineRow][newMineCol].getStatus().equals("M") || (newMineRow == x && newMineCol == y)) {
                 newMineRow = rand.nextInt(rows);
                 newMineCol = rand.nextInt(columns);
+                mines.push(new int[]{newMineRow, newMineCol});
             }
             board[newMineRow][newMineCol] = new Cell(false, "M");
         }
@@ -175,7 +174,7 @@ public class Minefield {
      * @return boolean Return false if guess did not hit mine or if flag was placed,
      *         true if mine found.
      */
-    public boolean guess(int x, int y, boolean flag) { //Luke
+    public boolean guess(int x, int y, boolean flag) { // Luke
         if (x >= board.length || x < 0 || y >= board[x].length || y < 0) return false;
         if (board[x][y].getFlagged()) { // check if cell is flagged, if so, unflag, since you can't guess a flagged cell
             board[x][y].setFlagged(false);
@@ -183,15 +182,40 @@ public class Minefield {
             System.out.println("Removed flag at (" + x + ", " + y + ")");
             return true;
         }
-        else if (flag && flags > 0 && !board[x][y].getRevealed())  {
+        // can flag revealed mines (start mine), can't reveal revealed spaces
+        else if (flag && flags > 0 && (!board[x][y].getRevealed() || board[x][y].getStatus().equals("M")))  {
             board[x][y].setFlagged(true);
             flags--;
+            // check if player won by all mines flagged
+            if (flags == 0) {
+                for (int row = 0; row < rows; row++) {
+                    for (int col = 0; col < columns; col++) {
+                        if (board[row][col].getFlagged() && !board[row][col].getStatus().equals("M")) return true; // flagged square not a mine
+                    }
+                }
+                System.out.println("You win!"); // if for loop complete, game over and all mines flagged
+                gameOver = true;
+            }
             return true;
         }
         else if (!flag) {
             board[x][y].setRevealed(true);
-            if (board[x][y].getStatus().equals("M")) gameOver = true;
-            else if (board[x][y].getStatus().equals("0")) revealZeroes(x, y);
+            if (board[x][y].getStatus().equals("M")) {
+                revealMines();
+                System.out.println("YOU LOST!");
+                gameOver = true;
+            } else if (board[x][y].getStatus().equals("0")) revealZeroes(x, y);
+            // check if the player won by all non-mine squares revealed
+            for (int row = 0; row < rows; row++) {
+                for (int col = 0; col < columns; col++) {
+                    // check for revealed squares, and confirm it is not revealed start mine
+                    if (!board[row][col].getRevealed()) {
+                        if (!board[row][col].getStatus().equals("M")) return true; // exit out, unrevealed square
+                    }
+                }
+            }
+            System.out.println("You win!"); // if for loop complete, game over and all non-mine squares revealed
+            gameOver = true;
             return true;
         }
         return false;
@@ -209,10 +233,17 @@ public class Minefield {
      *         revealed, otheriwse return true.
      */
     public boolean gameOver() {
-        if(gameOver) {
-            System.out.println("YOU LOST!");
-        }
         return gameOver;
+    }
+
+    // Reveals all mines at game over
+    private void revealMines() {
+        while (!mines.isEmpty()) {
+            // get mine
+            int[] mine = mines.pop();
+            // reveal every mine that is not revealed
+            if (!board[mine[0]][mine[1]].getRevealed()) board[mine[0]][mine[1]].setRevealed(true);
+        }
     }
 
     /**
@@ -277,7 +308,9 @@ public class Minefield {
             x = curr[0];
             y = curr[1];
             board[x][y].setRevealed(true); // reveal
-            if (board[x][y].getStatus().equals("M")) break; // break if mine is found
+            if (board[x][y].getStatus().equals("M")) {
+                break; // break if mine is found
+            }
             // check surroundings
             if (x < board.length - 1 && !board[x + 1][y].getRevealed()) {
                 indices.add(new int[] { x + 1, y });
@@ -310,10 +343,11 @@ public class Minefield {
     public void debug() { // Giacomo & Luke
         // using toString() with no hidden tiles
         System.out.println("-------------------\nDEBUGGER:");
+        System.out.print("  ");
         for (int col = 0; col < columns; col++) { // printing to help with coordinates
             System.out.print(col + " ");
         }
-        System.out.println();;
+        System.out.println();
         for (int row = 0; row < rows; row++) {
             System.out.print(row + " "); // help with coordinates
             for (int col = 0; col < columns; col++) {
