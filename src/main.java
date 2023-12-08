@@ -51,25 +51,33 @@ public class main {
         System.out.println(minefield);
         System.out.println("Enter Starting Coordinates [x] [y]:");
         response = scanner.nextLine().split(" ");
-        System.out.println(Arrays.toString(response));
-        int startX = Integer.parseInt(response[0]);
-        int startY = Integer.parseInt(response[1]);
-        minefield.createMines(startX, startY, numMines);
+        int startCol = Integer.parseInt(response[0]);
+        int startRow = Integer.parseInt(response[1]);
+        minefield.createMines(startCol, startRow, numMines);
         minefield.evaluateField();
         if (debug) minefield.debug();
-        minefield.revealStartingArea(startY, startX);
+        minefield.revealStartingArea(startCol, startRow);
 
         while ( ! minefield.gameOver()) {
             System.out.println(minefield);
             System.out.println("Enter Coordinates [x] [y] (add ' [F]' to your response for flag, remaining: " + minefield.getFlags() + "):");
             response = scanner.nextLine().split(" ");
-            int row = Integer.parseInt(response[1]);
-            int col = Integer.parseInt(response[0]);
+            while (true) { // infinite loop to allow infinite retries for invalid move
+                try { // using try-catch so game doesn't shut down when invalid move is entered
+                    if (response[0].toLowerCase().equals("end")) break;// extra condition for ending game
+                    int row = Integer.parseInt(response[1]);
+                    int col = Integer.parseInt(response[0]);
+                    if (minefield.guess(row, col, (response.length > 2))) break;
+                    System.out.println("Try again, input invalid."); // reached if there is an illegal move
+                    response = scanner.nextLine().split(" ");
+                }
+                catch(Exception e) {
+                    System.out.println("Error reading move, please try again. (format: [x] [y] flag: [F]"); // if there is an error in move detection (ex. wrong format, letters in string)
+                    response = scanner.nextLine().split(" ");
+                }
+            }
             if (debug) minefield.debug(); // for debug mode
             //if the guess() function returns false, there was an error in the input.
-            if(!minefield.guess(row, col, (response.length > 2))) {
-                System.out.println("Try again, input invalid.");
-            }
         }
         System.out.println(minefield); // for game over
     }
