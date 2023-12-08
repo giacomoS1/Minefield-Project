@@ -258,6 +258,8 @@ public class Minefield {
      * @param x The x value the user entered.
      * @param y The y value the user entered.
      */
+
+    //NEED TO CODE DIAGONALS
     public void revealZeroes(int x, int y) {
         Stack1Gen<int[]> indices = new Stack1Gen<>();
         indices.push(new int[] {x, y});
