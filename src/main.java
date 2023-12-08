@@ -49,7 +49,7 @@ public class main {
         }
         String[] response;
         System.out.println(minefield);
-        System.out.println("Enter Starting Coordinates [row] [col]:");
+        System.out.println("Enter Starting Coordinates [x] [y]:");
         response = scanner.nextLine().split(" ");
         System.out.println(Arrays.toString(response));
         int startX = Integer.parseInt(response[0]);
@@ -61,7 +61,7 @@ public class main {
 
         while ( ! minefield.gameOver()) {
             System.out.println(minefield);
-            System.out.println("Enter Coordinates [row] [col] (add ' [F]' to your response for flag, remaining: " + minefield.getFlags() + "):");
+            System.out.println("Enter Coordinates [x] [y] (add ' [F]' to your response for flag, remaining: " + minefield.getFlags() + "):");
             response = scanner.nextLine().split(" ");
             int row = Integer.parseInt(response[1]);
             int col = Integer.parseInt(response[0]);
