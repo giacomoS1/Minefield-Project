@@ -70,7 +70,7 @@ public class Minefield {
     // used to tell how many flags left in-game
     public int getFlags() {
         return flags;
-    }
+    } // Luke
 
     /**
      * evaluateField
@@ -234,10 +234,10 @@ public class Minefield {
      */
     public boolean gameOver() {
         return gameOver;
-    }
+    } // Giacomo
 
     // Reveals all mines at game over
-    private void revealMines() {
+    private void revealMines() { // Luke
         while (!mines.isEmpty()) {
             // get mine
             int[] mine = mines.pop();
@@ -260,7 +260,7 @@ public class Minefield {
      */
 
     //NEED TO CODE DIAGONALS
-    public void revealZeroes(int x, int y) {
+    public void revealZeroes(int x, int y) { // Giacomo
         Stack1Gen<int[]> indices = new Stack1Gen<>();
         indices.push(new int[] {x, y});
         while(!indices.isEmpty()) {
@@ -268,7 +268,6 @@ public class Minefield {
             x = cord[0];
             y = cord[1];
 
-            if(board[x][y].getStatus().equals("M")) continue;
             board[x][y].setRevealed(true);
             if(!board[x][y].getStatus().equals("0")) continue;
 

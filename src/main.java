@@ -1,5 +1,4 @@
 //Import Section
-import java.util.Arrays;
 import java.util.Scanner;
 /*
  * Provided in this class is the neccessary code to get started with your game's implementation
@@ -51,8 +50,17 @@ public class main {
         System.out.println(minefield);
         System.out.println("Enter Starting Coordinates [x] [y]:");
         response = scanner.nextLine().split(" ");
-        int startCol = Integer.parseInt(response[0]);
-        int startRow = Integer.parseInt(response[1]);
+        int startCol, startRow;
+        while (true) { // infinite loop to allow infinite retries for incorrect entry
+            try { // using try-catch so game doesn't shut down with incorrect input
+                startCol = Integer.parseInt(response[0]);
+                startRow = Integer.parseInt(response[1]);
+                break;
+            } catch (Exception e) {
+                System.out.println("Error reading move, please try again. (format: [x] [y]"); // if there is an error in move detection (ex. wrong format, letters in string)
+                response = scanner.nextLine().split(" ");
+            }
+        }
         minefield.createMines(startCol, startRow, numMines);
         minefield.evaluateField();
         if (debug) minefield.debug();
