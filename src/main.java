@@ -30,16 +30,16 @@ public class main {
         Minefield minefield = null;
         while (minefield == null) { // allowing infinite inputs until correct
             String difficulty = scanner.nextLine();
-            if (difficulty.equals("0") || difficulty.equals("0 debug")) {
-                if (difficulty.equals("0 debug")) debug = true;
+            if (difficulty.equals("0") || difficulty.toLowerCase().equals("0 debug")) {
+                if (difficulty.toLowerCase().equals("0 debug")) debug = true;
                 minefield = new Minefield(5, 5, 5);
                 numMines = 5;
-            } else if (difficulty.equals("1") || difficulty.equals("1 debug")) {
-                if (difficulty.equals("1 debug")) debug = true;
+            } else if (difficulty.equals("1") || difficulty.toLowerCase().equals("1 debug")) {
+                if (difficulty.toLowerCase().equals("1 debug")) debug = true;
                 minefield = new Minefield(9, 9, 12);
                 numMines = 12;
-            } else if ((difficulty.equals("2") || difficulty.equals("2 debug"))) {
-                if (difficulty.equals("2 debug")) debug = true;
+            } else if ((difficulty.equals("2") || difficulty.toLowerCase().equals("2 debug"))) {
+                if (difficulty.toLowerCase().equals("2 debug")) debug = true;
                 minefield = new Minefield(20, 20, 40);
                 numMines = 40;
             } else {
