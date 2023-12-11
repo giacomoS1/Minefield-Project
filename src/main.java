@@ -48,39 +48,41 @@ public class main {
         }
         String[] response;
         System.out.println(minefield);
-        System.out.println("Enter Starting Coordinates [x] [y]:");
+        System.out.println("Enter Starting Coordinates [row] [col]:");
         response = scanner.nextLine().split(" ");
         int startCol, startRow;
         while (true) { // infinite loop to allow infinite retries for incorrect entry
             try { // using try-catch so game doesn't shut down with incorrect input
-                startCol = Integer.parseInt(response[0]);
-                startRow = Integer.parseInt(response[1]);
+                startRow = Integer.parseInt(response[0]);
+                startCol = Integer.parseInt(response[1]);
                 break;
             } catch (Exception e) {
-                System.out.println("Error reading move, please try again. (format: [x] [y]"); // if there is an error in move detection (ex. wrong format, letters in string)
+                System.out.println("Error reading move, please try again. (format: [row] [col]"); // if there is an error in move detection (ex. wrong format, letters in string)
                 response = scanner.nextLine().split(" ");
             }
         }
-        minefield.createMines(startCol, startRow, numMines);
+        minefield.createMines(startRow, startCol, numMines);
         minefield.evaluateField();
         if (debug) minefield.debug();
-        minefield.revealStartingArea(startCol, startRow);
+        minefield.revealStartingArea(startRow, startCol);
 
         while ( ! minefield.gameOver()) {
             System.out.println(minefield);
-            System.out.println("Enter Coordinates [x] [y] (add ' [F]' to your response for flag, remaining: " + minefield.getFlags() + "):");
+            System.out.println("Enter Coordinates [row] [col] (add ' F' to your response for flag, remaining: " + minefield.getFlags() + "), enter flagged coordinates to unflag:");
             response = scanner.nextLine().split(" ");
             while (true) { // infinite loop to allow infinite retries for invalid move
                 try { // using try-catch so game doesn't shut down when invalid move is entered
                     if (response[0].toLowerCase().equals("end")) break;// extra condition for ending game
-                    int row = Integer.parseInt(response[1]);
-                    int col = Integer.parseInt(response[0]);
-                    if (minefield.guess(row, col, (response.length > 2))) break;
+                    int row = Integer.parseInt(response[0]);
+                    int col = Integer.parseInt(response[1]);
+                    boolean flag = false;
+                    if ((response.length > 2) && response[2].toUpperCase().equals("F")) flag = true; // flag detection
+                    if (minefield.guess(row, col, flag)) break;
                     System.out.println("Try again, input invalid."); // reached if there is an illegal move
                     response = scanner.nextLine().split(" ");
                 }
                 catch(Exception e) {
-                    System.out.println("Error reading move, please try again. (format: [x] [y] flag: [F]"); // if there is an error in move detection (ex. wrong format, letters in string)
+                    System.out.println("Error reading move, please try again. (format: [row] [col] flag: [F]"); // if there is an error in move detection (ex. wrong format, letters in string)
                     response = scanner.nextLine().split(" ");
                 }
             }
