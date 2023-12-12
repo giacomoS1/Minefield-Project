@@ -1,4 +1,5 @@
-//Import Section
+// Written by Luke Matuza, matuz005 and Giacomo Siniscalchi, sinis006
+// Import Section
 import java.util.Scanner;
 /*
  * Provided in this class is the neccessary code to get started with your game's implementation
@@ -11,10 +12,9 @@ import java.util.Scanner;
  * 3. When working inside your while loop think about what happens each turn. We get input, user our methods, check their return values. repeat.
  * 4. Once while loop is complete figure out how to determine if the user won or lost. Print appropriate statement.
  */
-
 public class main {
 
-    public static void main (String[] args) { //Giacomo & Luke
+    public static void main (String[] args) { // Giacomo & Luke
         //Prompt user for difficulty, make sure it's between 0 and 2 (inclusive)
         Scanner scanner = new Scanner(System.in);
         // Tracker for debug mode

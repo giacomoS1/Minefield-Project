@@ -1,6 +1,5 @@
+// Written by Luke Matuza, matuz005 and Giacomo Siniscalchi, sinis006
 import java.util.Random;
-
-//
 
 public class Minefield {
     /**
@@ -15,9 +14,14 @@ public class Minefield {
     public static final String ANSI_GREEN = "\u001b[32m";
     public static final String ANSI_PURPLE = "\u001b[35m";
     public static final String ANSI_CYAN = "\u001b[36m";
+    public static final String ANSI_PINK = "\u001b[38;5;199m";
+    public static final String ANSI_ORANGE = "\u001b[38;5;214m";
+    public static final String ANSI_BLUE_DARK = "\u001b[38;5;20m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001b[47m";
     public static final String ANSI_PURPLE_BACKGROUND = "\u001b[45m";
     public static final String ANSI_GREY_BACKGROUND = "\u001b[0m";
+
+
 
     /*
      * Class Variable Section
@@ -137,7 +141,7 @@ public class Minefield {
      *
      * @param x     Start x, avoid placing on this square.
      * @param y     Start y, avoid placing on this square.
-     * @param mines Number of mines to place.
+     * @param numMines Number of mines to place.
      */
     public void createMines(int x, int y, int numMines) { // Giacomo
         Random rand = new Random();
@@ -270,7 +274,7 @@ public class Minefield {
 
             board[x][y].setRevealed(true);
             if(!board[x][y].getStatus().equals("0")) continue;
-
+            // Add surrounding tiles only if the current cell is zero
             if (x < board.length - 1 && !board[x + 1][y].getRevealed()) {
                 indices.push(new int[]{x + 1, y});
             }
@@ -282,6 +286,19 @@ public class Minefield {
             }
             if (y > 0 && !board[x][y - 1].getRevealed()) {
                 indices.push(new int[]{x, y - 1});
+            }
+            // Diagonals included for boundaries
+            if (x < board.length - 1 && y < board[0].length - 1 && !board[x + 1][y + 1].getRevealed()) {
+                indices.push(new int[]{x + 1, y + 1});
+            }
+            if (x > 0 && y > 0 && !board[x - 1][y - 1].getRevealed()) {
+                indices.push(new int[]{x - 1, y - 1});
+            }
+            if (x > 0 && y < board[0].length - 1 && !board[x - 1][y + 1].getRevealed()) {
+                indices.push(new int[]{x - 1, y + 1});
+            }
+            if (x < board.length - 1 && y > 0 && !board[x + 1][y - 1].getRevealed()) {
+                indices.push(new int[]{x + 1, y - 1});
             }
 
         }
@@ -377,10 +394,20 @@ public class Minefield {
                         case "5":
                             System.out.print(ANSI_PURPLE + "5 " + ANSI_GREY_BACKGROUND);
                             break;
+                        case "6":
+                            System.out.print(ANSI_PINK + "6 " + ANSI_GREY_BACKGROUND);
+                            break;
+
+                        case "7":
+                            System.out.print(ANSI_ORANGE + "7 " + ANSI_GREY_BACKGROUND);
+                            break;
+
+                        case "8":
+                            System.out.print(ANSI_BLUE_DARK + "8 " + ANSI_GREY_BACKGROUND);
+                            break;
                         default:
                             System.out.print(ANSI_RED + board[row][col].getStatus() + " " + ANSI_GREY_BACKGROUND);
                     }
-                    // s += cell.getStatus() + " ";
                 }
             System.out.println();;
             }
@@ -435,12 +462,22 @@ public class Minefield {
                             case "5":
                                 s += ANSI_PURPLE + "5" + ANSI_GREY_BACKGROUND;
                                 break;
+                            case "6":
+                                System.out.print(ANSI_PINK + "6 " + ANSI_GREY_BACKGROUND);
+                                break;
+
+                            case "7":
+                                System.out.print(ANSI_ORANGE + "7 " + ANSI_GREY_BACKGROUND);
+                                break;
+
+                            case "8":
+                                System.out.print(ANSI_BLUE_DARK + "8 " + ANSI_GREY_BACKGROUND);
+                                break;
                             default:
                                 s += ANSI_RED + board[row][col].getStatus() + "" + ANSI_GREY_BACKGROUND;
                         }
                         s+= "  "; //padding
                     }
-                    // s += cell.getStatus() + " ";
                 } else {
                     s += "-  ";
                 }
